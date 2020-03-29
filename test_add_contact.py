@@ -129,7 +129,7 @@ class TestAddContact(unittest.TestCase):
         driver.find_element_by_xpath("//input[@value='Login']").click()
 
     def open_home_page(self, driver):
-        driver.get("http://localhost/addressbook/")
+        driver.get("http://localhost:8080/addressbook/")
 
     def is_element_present(self, how, what):
         try: self.driver.find_element(by=how, value=what)
