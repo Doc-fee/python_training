@@ -6,6 +6,8 @@ from model.grroup import Group
 #     app.session.logout()
 
 def test_edit_group_name(app):
+    if app.group.count() == 0:
+        app.group.create(Group(name='test'))
     app.group.edit_first_group(Group(name='Train'))
 
 def test_edit_group_header(app):
