@@ -22,8 +22,9 @@ class Aplication:
 
     def open_home_page(self):
         wd = self.wd
-        if not (wd.current_url.endswith('')):
+        if not (wd.current_url.endswith('addressbook/')):
             wd.get("http://localhost:8080/addressbook/")
+
 
 
 
