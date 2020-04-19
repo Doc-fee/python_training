@@ -7,7 +7,7 @@ class ContactHelper:
 
     def return_home_page(self):
         wd = self.app.wd
-        wd.find_element_by_link_text("home page").click()
+        wd.find_element_by_link_text("home").click()
 
     def delete_first_contact(self):
         wd = self.app.wd
@@ -17,6 +17,7 @@ class ContactHelper:
         wd.find_element_by_xpath("//input[@value='Delete']").click()
         # close dialog module
         wd.switch_to_alert().accept()
+        wd.find_element_by_xpath("//div[@id='content']/div[@class='msgbox']")
         self.return_home_page()
 
     def edit_first_contact(self, contact):
@@ -98,10 +99,13 @@ class ContactHelper:
         wd = self.app.wd
         self.app.open_home_page()
         contacts = []
+        elementsTd = []
         for element in wd.find_elements_by_css_selector("tr[name=entry]"):
-            text = element.text
+            elementsTd = element.find_elements_by_css_selector("td")
+            lastName = elementsTd[1].text
+            firstName = elementsTd[2].text
             id = element.find_element_by_name("selected[]").get_attribute("value")
-            contacts.append(Contact(name=text, id=id))
+            contacts.append(Contact(name=firstName, id=id, lastname=lastName))
         return contacts
 
 

@@ -8,7 +8,7 @@ def test_edit_first_contact(app):
         app.contact.submit()
         app.contact.return_home_page()
     old_contacts = app.contact.get_contact_list()
-    contact = Contact(name = "Boris", nickname = "Gus")
+    contact = Contact(name = "Boris", nickname = "Gus", lastname = "Lee")
     contact.id = old_contacts[0].id
     app.contact.edit_first_contact(contact)
     new_contacts = app.contact.get_contact_list()
