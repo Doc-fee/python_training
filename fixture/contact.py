@@ -10,9 +10,12 @@ class ContactHelper:
         wd.find_element_by_link_text("home").click()
 
     def delete_first_contact(self):
+        self.delete_contact_by_index(0)
+
+    def delete_contact_by_index(self, index):
         wd = self.app.wd
-        # select first contact
-        wd.find_element_by_name("selected[]").click()
+        # select contact by index
+        wd.find_elements_by_name("selected[]")[index].click()
         # submit delete
         wd.find_element_by_xpath("//input[@value='Delete']").click()
         # close dialog module
@@ -22,7 +25,12 @@ class ContactHelper:
         self.contact_cache = None
 
     def edit_first_contact(self, contact):
+        self.edit_contact_by_index(0, contact)
+
+    def edit_contact_by_index(self, index, contact):
         wd = self.app.wd
+        # select contact by index
+        wd.find_elements_by_name("selected[]")[index].click()
         # click Edit
         wd.find_element_by_xpath("//img[@alt='Edit']").click()
         # fill forms
