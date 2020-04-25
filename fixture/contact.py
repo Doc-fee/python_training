@@ -27,7 +27,7 @@ class ContactHelper:
 
     def edit_first_contact(self, contact):
         self.edit_contact_by_index(0, contact)
-
+    #Доработала
     def edit_contact_by_index(self, index, contact):
         wd = self.app.wd
         # select contact by index
