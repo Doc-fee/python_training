@@ -1,4 +1,5 @@
 from model.contact import Contact
+import re
 
 class ContactHelper:
 
@@ -30,15 +31,29 @@ class ContactHelper:
     def edit_contact_by_index(self, index, contact):
         wd = self.app.wd
         # select contact by index
-        wd.find_elements_by_name("selected[]")[index].click()
-        # click Edit
-        wd.find_element_by_xpath("//img[@alt='Edit']").click()
+        #wd.find_elements_by_name("selected[]")[index].click()
+        self.click_edit_by_index(index)
+        #wd.find_element_by_xpath("//img[@alt='Edit']")[index].click()
         # fill forms
         self.fill_contact(contact)
         # update info
         wd.find_element_by_name("update").click()
         self.return_home_page()
         self.contact_cache = None
+
+    def click_edit_by_index(self, index):
+        wd = self.app.wd
+        self.app.open_home_page()
+        element = wd.find_elements_by_name("entry")[index]
+        pencil = element.find_elements_by_tag_name("td")[7]
+        pencil.find_element_by_tag_name("a").click()
+
+    def click_details_by_index(self, index):
+        wd = self.app.wd
+        self.app.open_home_page()
+        element = wd.find_elements_by_name("entry")[index]
+        person = element.find_elements_by_tag_name("td")[6]
+        person.find_element_by_tag_name("a").click()
 
     def submit(self):
         wd = self.app.wd
@@ -62,7 +77,7 @@ class ContactHelper:
         self.change_field_value("lastname", contact.lastname)
         # add nickname
         self.change_field_value("nickname", contact.nickname)
-         # add title
+        # add title
         self.change_field_value("title", contact.title)
         # add company
         self.change_field_value("company", contact.company)
@@ -119,5 +134,40 @@ class ContactHelper:
                 lastName = elementsTd[1].text
                 firstName = elementsTd[2].text
                 id = element.find_element_by_name("selected[]").get_attribute("value")
-                self.contact_cache.append(Contact(name=firstName, id=id, lastname=lastName))
+                all_phones = elementsTd[5].text
+                all_emails = elementsTd[4].text
+                address = elementsTd[3].text
+                self.contact_cache.append(Contact(name=firstName, id=id, lastname=lastName,
+                                                  all_phones_from_home_page=all_phones,
+                                                  all_emails_from_home_page=all_emails,
+                                                  address=address))
         return list(self.contact_cache)
+
+    def get_contact_info_from_edit_page(self, index):
+        wd = self.app.wd
+        self.click_edit_by_index(index)
+        firstname = wd.find_element_by_name("firstname").get_attribute('value')
+        lastname = wd.find_element_by_name("lastname").get_attribute('value')
+        id = wd.find_element_by_name("id").get_attribute('value')
+        homephone = wd.find_element_by_name("home").get_attribute('value')
+        work = wd.find_element_by_name("work").get_attribute('value')
+        mobile = wd.find_element_by_name("mobile").get_attribute('value')
+        phone2 = wd.find_element_by_name("phone2").get_attribute('value')
+        email = wd.find_element_by_name("email").get_attribute('value')
+        email2 = wd.find_element_by_name("email2").get_attribute('value')
+        email3 = wd.find_element_by_name("email3").get_attribute('value')
+        address = wd.find_element_by_name("address").get_attribute('value')
+        return Contact(name=firstname, lastname=lastname, id=id,
+                       homephone=homephone, mobile=mobile, work=work, phone2=phone2,
+                       email=email, email2=email2, email3=email3, address=address)
+
+    def get_contact_from_view_page(self, index):
+        wd = self.app.wd
+        self.click_details_by_index(index)
+        text = wd.find_element_by_id("content").text
+        homephone = re.search("H: (.*)", text).group(1)
+        work = re.search("W: (.*)", text).group(1)
+        mobile = re.search("M: (.*)", text).group(1)
+        phone2 = re.search("P: (.*)", text).group(1)
+        return Contact(homephone=homephone, mobile=mobile, work=work, phone2=phone2)
+
