@@ -171,3 +171,36 @@ class ContactHelper:
         phone2 = re.search("P: (.*)", text).group(1)
         return Contact(homephone=homephone, mobile=mobile, work=work, phone2=phone2)
 
+    def delete_contact_by_id(self, id):
+        wd = self.app.wd
+        # select contact by id
+        wd.find_element_by_css_selector("input[value='%s']" % id).click()
+        # submit delete
+        wd.find_element_by_xpath("//input[@value='Delete']").click()
+        # close dialog module
+        wd.switch_to_alert().accept()
+        wd.find_element_by_xpath("//div[@id='content']/div[@class='msgbox']")
+        self.return_home_page()
+        self.contact_cache = None
+
+    def edit_contact_by_id(self, id, contact):
+        wd = self.app.wd
+        # select contact by index
+        #wd.find_elements_by_name("selected[]")[index].click()
+        self.click_edit_by_id(id)
+        #wd.find_element_by_xpath("//img[@alt='Edit']")[index].click()
+        # fill forms
+        self.fill_contact(contact)
+        # update info
+        wd.find_element_by_name("update").click()
+        self.return_home_page()
+        self.contact_cache = None
+
+    def click_edit_by_id(self, id):
+        wd = self.app.wd
+        self.app.open_home_page()
+        # element = wd.find_elements_by_name("entry")[index]
+        # pencil = element.find_elements_by_tag_name("td")[7]
+        # pencil.find_element_by_tag_name("a").click()
+        wd.find_element_by_css_selector("a[href='edit.php?id=%s']" % id).click()
+
