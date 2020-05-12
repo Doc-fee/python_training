@@ -6,6 +6,7 @@ import importlib
 import jsonpickle
 from fixture.aplication import Aplication
 from fixture.db import Dbfixture
+from fixture.orm import ORMfixture
 
 fixture = None
 target = None
@@ -23,10 +24,10 @@ def app(request):
     global fixture
     browser = request.config.getoption("--browser")
     global target
-    wed_config = load_config(request.config.getoption("--target"))['web']
+    web_config = load_config(request.config.getoption("--target"))['web']
     if fixture is None or not fixture.is_valid():
-        fixture = Aplication(browser=browser, base_url=wed_config['baseUrl'])
-    fixture.session.ensure_login(username=wed_config["username"], password=wed_config["password"])
+        fixture = Aplication(browser=browser, base_url=web_config['baseUrl'])
+    fixture.session.ensure_login(username=web_config["username"], password=web_config["password"])
     return fixture
 
 @pytest.fixture(scope='session')
@@ -38,6 +39,13 @@ def db(request):
         dbfixture.destroy()
     request.addfinalizer(fin)
     return dbfixture
+
+@pytest.fixture(scope='session')
+def orm(request):
+    global target
+    db_config = load_config(request.config.getoption("--target"))['db']
+    orm_fixture = ORMfixture(host=db_config['host'], name=db_config['name'], user=db_config['user'], password=db_config['password'])
+    return orm_fixture
 
 
 @pytest.fixture(scope='session', autouse=True)

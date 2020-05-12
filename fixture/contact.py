@@ -204,3 +204,18 @@ class ContactHelper:
         # pencil.find_element_by_tag_name("a").click()
         wd.find_element_by_css_selector("a[href='edit.php?id=%s']" % id).click()
 
+
+    def add_contact_by_id_to_group(self, contact_id, group_id):
+        wd = self.app.wd
+        self.app.open_home_page()
+        # select contact by id
+        wd.find_element_by_css_selector("input[value='%s']" % contact_id).click()
+        wd.find_element_by_xpath("//select[@name='to_group']/option[@value='"+group_id+"']").click()
+        wd.find_element_by_xpath("(//input[@name='add'])").click()
+        self.return_home_page()
+
+
+
+
+
+

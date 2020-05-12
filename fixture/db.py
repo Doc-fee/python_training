@@ -8,7 +8,7 @@ class Dbfixture:
         self.name = name
         self.user = user
         self.password = password
-        self.connection = mysql.connector.Connect(user=user, host=host, database=name, password=password,    autocommit = True)
+        self.connection = mysql.connector.Connect(user=user, host=host, database=name, password=password, autocommit=True)
 
     def get_group_list(self):
         list = []
@@ -26,14 +26,14 @@ class Dbfixture:
         list = []
         cursor = self.connection.cursor()
         try:
-            cursor.execute("select id, firstname, lastname from addressbook where deprecated = "0000-00-00 00:00:00)
+            cursor.execute("select id, firstname, lastname from addressbook where deprecated = '0000-00-00 00:00:00'")
             for row in cursor:
                 (id, name, lastname) = row
                 list.append(Contact(id=str(id), name=name, lastname=lastname))
         finally:
             cursor.close()
         return list
-
+ 
 
     def destroy(self):
         self.connection.close()
