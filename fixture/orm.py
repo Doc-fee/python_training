@@ -25,7 +25,7 @@ class ORMfixture:
         groups = Set(lambda: ORMfixture.ORMGroup, table="address_in_groups", column="group_id", reverse="contacts", lazy=True)
 
     def __init__(self, host, name, user, password):
-        self.db.bind('mysql', user=user, host=host, database=name, password=password, autocommit=True, conv=decoders)
+        self.db.bind('mysql', user=user, host=host, database=name, password=password, autocommit=True)
         self.db.generate_mapping()
         sql_debug(True)
 
