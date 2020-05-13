@@ -1,6 +1,6 @@
- import mysql.connector
- from model.grroup import Group
- from model.contact import Contact
+import mysql.connector
+from model.grroup import Group
+from model.contact import Contact
 
 class Dbfixture:
     def __init__(self, host, name, user, password):
