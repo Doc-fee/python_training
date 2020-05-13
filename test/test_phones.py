@@ -1,5 +1,5 @@
-from model.contact import Contact
-import re
+ from model.contact import Contact
+ import re
 
 def test_contacts_home_page(app,db):
     contact_from_home_page = app.contact.get_contact_list()
