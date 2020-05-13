@@ -10,6 +10,14 @@ def test_contacts_home_page(app,db):
     sort_contact_from_home_page = sorted(contact_from_home_page, key=Contact.id_or_max)
     sort_contact_from_db = sorted(new_contact_from_dbe, key=Contact.id_or_max)
 
+    #name
+    for number in range(len(sort_contact_from_db)):
+        assert sort_contact_from_db[number].name == sort_contact_from_home_page[number].name
+
+    #lastname
+    for number in range(len(sort_contact_from_db)):
+        assert sort_contact_from_db[number].lastname == sort_contact_from_home_page[number].lastname
+
     # phones
     for number in range(len(sort_contact_from_db)):
         assert sort_contact_from_db[number].all_phones_from_home_page == sort_contact_from_home_page[number].all_phones_from_home_page
