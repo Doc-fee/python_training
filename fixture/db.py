@@ -33,6 +33,19 @@ class Dbfixture:
         finally:
             cursor.close()
         return list
+
+    def get_means_of_communication(self):
+        list = []
+        cursor = self.connection.cursor()
+        try:
+            cursor.execute("select id, firstname, lastname, address, home, mobile, work, phone2, email, email2, email3 from addressbook where deprecated = '0000-00-00 00:00:00'")
+            for row in cursor:
+                (id, firstname, lastname, address, home, mobile, work, phone2, email, email2, email3) = row
+                list.append(Contact(name=firstname, lastname=lastname, id=id, address=address, homephone=home,
+                                    mobile=mobile, work=work, phone2=phone2, email=email, email2=email2, email3=email3,))
+        finally:
+            cursor.close()
+        return list
  
 
     def destroy(self):
