@@ -16,12 +16,20 @@ def test_del_contact_to_group(app, db, orm):
         app.contact.return_home_page()
 
     groups = db.get_group_list()
-    group = random.choice(groups)
-    old_contacts_in_group = orm.get_contacts_in_group(group)
+    group = Group()
+    old_contacts_in_group = []
+
+    for gr in groups:
+        old_contacts_in_group = orm.get_contacts_in_group(gr)
+        if len(old_contacts_in_group) != 0:
+            group = gr
+            break
+
     contact_for_del = Contact()
 
     # предусловие на наличие этого контакта в этой группе
     if len(old_contacts_in_group) == 0:
+        group = random.choice(groups)
         contacts = db.get_contact_list()
         contact_for_del = random.choice(contacts)
         app.contact.add_contact_by_id_to_group(contact_for_del.id, group.id)
